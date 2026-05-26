@@ -363,7 +363,241 @@ const BADGE = {
 };
 
 const STORAGE_KEY = "campCalendar_v1";
-let CAMPS_DATA = { camps: [] };
+
+// Camp data — keep in sync with camps.json
+const CAMPS_DATA = { camps: [
+  {
+    id: "camp-legacy-regular",
+    name: "Camp Legacy – Regular Week",
+    provider: "Ladue Schools",
+    ages: "Rising 6th–9th grade",
+    weeks: ["jun2", "jun3", "jun5", "jul1"],
+    priceDisplay: "$355 / week",
+    description: "45-minute classes in diverse activities including robotics, cooking, sports, and arts. Located at Ladue Middle School, 9701 Conway Rd.",
+    note: "$175 deposit secures spot · $15 off early deposit · $10 off per additional session",
+    url: "https://ladueschools.arux.app/child-care/1/camp-legacy"
+  },
+  {
+    id: "camp-legacy-excursion",
+    name: "Camp Legacy – Excursion Week",
+    provider: "Ladue Schools",
+    ages: "Rising 6th–9th grade",
+    weeks: ["jun1", "jun4", "jul2"],
+    priceDisplay: "$405 / week",
+    description: "Field trip-focused week visiting venues like water parks, skating rinks, and entertainment centers.",
+    note: "$175 deposit secures spot (limit 100 students/week)",
+    url: "https://ladueschools.arux.app/child-care/1/camp-legacy"
+  },
+  {
+    id: "ignite-something-rotten",
+    name: "Something Rotten Jr.",
+    provider: "Ignite Theatre Company",
+    ages: "6th–10th grade",
+    weeks: ["jun1", "jun2"],
+    priceDisplay: "$625 (two-week program)",
+    description: "Two-week musical theater intensive. Week 1 at Ignite Theatre Company, Week 2 at Robert E. Reim Theatre. Must enroll in both weeks.",
+    note: "Verify 2026 dates with Ignite — pricing based on 2025 schedule",
+    url: "https://ignitewithus.org/summeratignite/"
+  },
+  {
+    id: "nerinx-art-camp",
+    name: "Grade School Art Camp",
+    provider: "Nerinx Hall",
+    ages: "Grades 4–8",
+    weeks: ["jun1", "jun2"],
+    priceDisplay: "$355 (two-week program, Jun 1–12)",
+    description: "Hands-on exploration of silk-screening, pinhole photography, ceramics, drawing, painting, and fresco. Ends with a public art show on June 12.",
+    note: "Must enroll both weeks · Verify 2026 dates",
+    url: "https://www.nerinxhall.org/summercamp"
+  },
+  {
+    id: "nerinx-musical-theatre-1",
+    name: "Musical Theatre Camp I",
+    provider: "Nerinx Hall",
+    ages: "Grades 6–8",
+    weeks: ["jun1"],
+    priceDisplay: "$305",
+    description: "Broadway-focused training in vocals, choreography, and stagecraft. 9am–3pm. Ends with a family performance showcase.",
+    note: "Verify 2026 dates",
+    url: "https://www.nerinxhall.org/summercamp"
+  },
+  {
+    id: "nerinx-candy-lab-1",
+    name: "The Candy Lab I",
+    provider: "Nerinx Hall",
+    ages: "Grades 6–8",
+    weeks: ["jun1"],
+    priceDisplay: "$125",
+    description: "Candy-making paired with chemistry lessons on crystallization, solubility, and chemical reactions. 10:30am–12:30pm.",
+    note: "Verify 2026 dates",
+    url: "https://www.nerinxhall.org/summercamp"
+  },
+  {
+    id: "nerinx-basketball-1",
+    name: "Basketball Camp I",
+    provider: "Nerinx Hall",
+    ages: "Grades 6–8",
+    weeks: ["jun1"],
+    priceDisplay: "$125",
+    description: "Skill-building through drills, mini-games, and focused instruction for all ability levels. 10:30am–12:30pm.",
+    note: "Verify 2026 dates",
+    url: "https://www.nerinxhall.org/summercamp"
+  },
+  {
+    id: "nerinx-stem-1",
+    name: "STEM Camp I",
+    provider: "Nerinx Hall",
+    ages: "Grades 6–8",
+    weeks: ["jun1"],
+    priceDisplay: "$125",
+    description: "Hands-on exploration of five senses, force and motion, astronomy, and life sciences. 1–3pm.",
+    note: "Verify 2026 dates",
+    url: "https://www.nerinxhall.org/summercamp"
+  },
+  {
+    id: "nerinx-spanish",
+    name: "Spanish for Travelers Camp",
+    provider: "Nerinx Hall",
+    ages: "Grades 3–8",
+    weeks: ["jun1"],
+    priceDisplay: "$125",
+    description: "Practical language skills and cultural immersion focusing on travel scenarios and Hispanic traditions. 1–3pm.",
+    note: "Verify 2026 dates",
+    url: "https://www.nerinxhall.org/summercamp"
+  },
+  {
+    id: "nerinx-field-hockey",
+    name: "Grade School Field Hockey Camp",
+    provider: "Nerinx Hall",
+    ages: "Grades 3–8",
+    weeks: ["jun1"],
+    priceDisplay: "$125",
+    description: "Fundamentals, tactical games, and scrimmages with ability-based grouping. 8:30–10:30am. Mon–Thu only.",
+    note: "Verify 2026 dates",
+    url: "https://www.nerinxhall.org/summercamp"
+  },
+  {
+    id: "nerinx-empowerher",
+    name: "Camp EmpowerHER",
+    provider: "Nerinx Hall",
+    ages: "Grades 7–8",
+    weeks: ["jun2"],
+    priceDisplay: "$255",
+    description: "Leadership development rooted in self-discovery, community engagement, and Nerinx values. 9am–1pm.",
+    note: "Verify 2026 dates",
+    url: "https://www.nerinxhall.org/summercamp"
+  },
+  {
+    id: "nerinx-game-on-1",
+    name: "Game ON! Camp I",
+    provider: "Nerinx Hall",
+    ages: "Grades 4–8",
+    weeks: ["jun2"],
+    priceDisplay: "$125",
+    description: "Board games, card games, strategy challenges, and age-appropriate gaming emphasizing teamwork. 1–3pm. Mon–Thu only.",
+    note: "Verify 2026 dates",
+    url: "https://www.nerinxhall.org/summercamp"
+  },
+  {
+    id: "nerinx-mock-trial",
+    name: "Mock Trial: Order in the Camp!",
+    provider: "Nerinx Hall",
+    ages: "Grades 6–8",
+    weeks: ["jun3"],
+    priceDisplay: "$125",
+    description: "Legal education through courtroom roles, public speaking, and critical thinking challenges. 8:30–10:30am. Mon–Thu only.",
+    note: "Verify 2026 dates",
+    url: "https://www.nerinxhall.org/summercamp"
+  },
+  {
+    id: "nerinx-tennis-2",
+    name: "Tennis Camp II",
+    provider: "Nerinx Hall",
+    ages: "Grades 6–8",
+    weeks: ["jun3"],
+    priceDisplay: "$125",
+    description: "Advanced instruction for intermediate and experienced players at Webster Groves Recreation Center. 10–11:30am. Mon–Thu only.",
+    note: "Verify 2026 dates",
+    url: "https://www.nerinxhall.org/summercamp"
+  },
+  {
+    id: "nerinx-babysitting",
+    name: "Adventures in Babysitting Camp",
+    provider: "Nerinx Hall",
+    ages: "Grades 5–8",
+    weeks: ["jun3"],
+    priceDisplay: "$140",
+    description: "Safety, first aid, and childcare techniques through hands-on role-playing. 10:30am–12:30pm. Mon–Thu only.",
+    note: "Verify 2026 dates",
+    url: "https://www.nerinxhall.org/summercamp"
+  },
+  {
+    id: "nerinx-soccer-2",
+    name: "Soccer Camp II",
+    provider: "Nerinx Hall",
+    ages: "Grades 6–8",
+    weeks: ["jun3"],
+    priceDisplay: "$125",
+    description: "Advanced drills and competitive scrimmages for experienced players. 10:30am–12:30pm. Mon–Thu only.",
+    note: "Verify 2026 dates",
+    url: "https://www.nerinxhall.org/summercamp"
+  },
+  {
+    id: "nerinx-crafting",
+    name: "Crafting with Heart Camp",
+    provider: "Nerinx Hall",
+    ages: "Grades 5–8",
+    weeks: ["jun3"],
+    priceDisplay: "$165",
+    description: "Macramé, paper quilling, and mixed-media techniques for personalized creations. 12:30–3:30pm. Mon–Thu only.",
+    note: "Verify 2026 dates",
+    url: "https://www.nerinxhall.org/summercamp"
+  },
+  {
+    id: "nerinx-creative-writing",
+    name: "Creative Writing Camp",
+    provider: "Nerinx Hall",
+    ages: "Grades 6–8",
+    weeks: ["jun3"],
+    priceDisplay: "$125",
+    description: "Character development and storytelling strategies to strengthen writing abilities. 1–3pm. Mon–Thu only.",
+    note: "Verify 2026 dates",
+    url: "https://www.nerinxhall.org/summercamp"
+  },
+  {
+    id: "nerinx-dance",
+    name: "Dance Camp",
+    provider: "Nerinx Hall",
+    ages: "Grades 4–8",
+    weeks: ["jun4"],
+    priceDisplay: "$125",
+    description: "Pom, jazz, and hip-hop routines with technique refinement and performance opportunity. 8:30–10:30am. Mon–Thu only.",
+    note: "Verify 2026 dates",
+    url: "https://www.nerinxhall.org/summercamp"
+  },
+  {
+    id: "nerinx-lacrosse",
+    name: "Lacrosse Camp",
+    provider: "Nerinx Hall",
+    ages: "Grades 4–8",
+    weeks: ["jun4"],
+    priceDisplay: "$125",
+    description: "Cradling, passing, and scoring instruction with skill-building and competitive games. 1–3pm. Mon–Thu only.",
+    note: "Verify 2026 dates",
+    url: "https://www.nerinxhall.org/summercamp"
+  },
+  {
+    id: "nerinx-volleyball-3",
+    name: "Volleyball Camp III",
+    provider: "Nerinx Hall",
+    ages: "Grades 7–8",
+    weeks: ["jun4"],
+    priceDisplay: "$125",
+    description: "Advanced-level training for experienced middle school athletes. 1–3pm. Mon–Thu only.",
+    note: "Verify 2026 dates",
+    url: "https://www.nerinxhall.org/summercamp"
+  }
+]};
 
 function loadState() {
   try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); }
@@ -380,11 +614,7 @@ function campsForWeek(weekId) {
   });
 }
 
-async function init() {
-  try {
-    var resp = await fetch("./camps.json");
-    if (resp.ok) CAMPS_DATA = await resp.json();
-  } catch(e) { /* offline or local file — no suggestions */ }
+function init() {
   renderCalendar();
 }
 
