@@ -62,10 +62,10 @@
     overflow: hidden;
     box-shadow: 0 1px 3px rgba(0,0,0,0.06);
   }
-  .week-card.blocked { border-left-color: #fc8181; }
+  .week-card.blocked  { border-left-color: #fc8181; }
   .week-card.available { border-left-color: #68d391; }
-  .week-card.camps { border-left-color: #63b3ed; }
-  .week-card.decided { border-left-color: #b794f4; }
+  .week-card.has-suggestions { border-left-color: #63b3ed; }
+  .week-card.decided  { border-left-color: #b794f4; }
 
   .week-header {
     display: flex;
@@ -75,27 +75,20 @@
     cursor: pointer;
     user-select: none;
   }
-  .week-dates {
-    font-weight: 600;
-    font-size: 0.95rem;
-  }
+  .week-dates { font-weight: 600; font-size: 0.95rem; }
   .week-badge {
     font-size: 0.75rem;
     font-weight: 600;
     padding: 3px 10px;
     border-radius: 20px;
     white-space: nowrap;
+    flex-shrink: 0;
   }
-  .badge-blocked { background: #fed7d7; color: #c53030; }
+  .badge-blocked   { background: #fed7d7; color: #c53030; }
   .badge-available { background: #c6f6d5; color: #276749; }
-  .badge-camps { background: #bee3f8; color: #2b6cb0; }
-  .badge-decided { background: #e9d8fd; color: #553c9a; }
+  .badge-camps     { background: #bee3f8; color: #2b6cb0; }
+  .badge-decided   { background: #e9d8fd; color: #553c9a; }
 
-  .week-note {
-    font-size: 0.82rem;
-    color: #718096;
-    margin-left: 12px;
-  }
   .week-body {
     padding: 0 16px 14px;
     border-top: 1px solid #f7fafc;
@@ -104,57 +97,6 @@
     font-size: 0.88rem;
     color: #c53030;
     padding-top: 10px;
-  }
-  .camps-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 10px;
-    padding-top: 12px;
-  }
-  .camp-tile {
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 12px 14px;
-    position: relative;
-  }
-  .camp-tile.picked {
-    border-color: #b794f4;
-    background: #faf5ff;
-  }
-  .camp-name {
-    font-weight: 600;
-    font-size: 0.92rem;
-    margin-bottom: 2px;
-  }
-  .camp-meta {
-    font-size: 0.78rem;
-    color: #718096;
-    margin-bottom: 6px;
-  }
-  .camp-desc {
-    font-size: 0.82rem;
-    color: #4a5568;
-    margin-bottom: 8px;
-    line-height: 1.45;
-  }
-  .camp-price {
-    display: inline-block;
-    font-weight: 700;
-    font-size: 0.9rem;
-    color: #2b6cb0;
-    background: #ebf8ff;
-    padding: 2px 8px;
-    border-radius: 4px;
-  }
-  .picked-badge {
-    position: absolute;
-    top: 10px; right: 10px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    background: #b794f4;
-    color: white;
-    padding: 2px 7px;
-    border-radius: 10px;
   }
   .week-decided-note {
     font-size: 0.88rem;
@@ -168,13 +110,103 @@
     padding-top: 10px;
     font-style: italic;
   }
-  .week-header-left {
-    display: flex;
-    align-items: center;
-    flex: 1;
+  .camps-section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #a0aec0;
+    padding-top: 14px;
+    padding-bottom: 4px;
   }
+  .camps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+    padding-top: 8px;
+  }
+  .camp-tile {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px 14px;
+    position: relative;
+    cursor: pointer;
+    transition: box-shadow 0.12s, border-color 0.12s;
+  }
+  .camp-tile:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.09); }
+  .camp-tile.picked {
+    border-color: #b794f4;
+    background: #faf5ff;
+    cursor: default;
+  }
+  .camp-tile.interested {
+    border-color: #f6ad55;
+    background: #fffbf0;
+  }
+  .camp-name { font-weight: 600; font-size: 0.92rem; margin-bottom: 2px; }
+  .camp-meta { font-size: 0.78rem; color: #718096; margin-bottom: 6px; }
+  .camp-desc { font-size: 0.82rem; color: #4a5568; margin-bottom: 6px; line-height: 1.45; }
+  .camp-note { font-size: 0.75rem; color: #a0aec0; margin-bottom: 8px; }
+  .camp-price {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #2b6cb0;
+    background: #ebf8ff;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .tile-badge {
+    position: absolute;
+    top: 10px; right: 10px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 10px;
+    color: white;
+  }
+  .tile-badge.picked-badge   { background: #b794f4; }
+  .tile-badge.interest-badge { background: #f6ad55; }
+
+  /* Custom camp form */
+  .custom-camp-area { padding-top: 12px; }
+  .btn-add-custom {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #667eea;
+    background: none;
+    border: 1px dashed #667eea;
+    border-radius: 6px;
+    padding: 5px 12px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  .btn-add-custom:hover { background: #ebf4ff; }
+  .custom-form {
+    border: 1px dashed #cbd5e0;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-top: 10px;
+  }
+  .form-row { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  .form-input {
+    flex: 1;
+    min-width: 120px;
+    padding: 6px 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-family: inherit;
+  }
+  .form-input:focus { outline: none; border-color: #667eea; }
+  .btn-save { background: #667eea; color: white; border: none; border-radius: 6px; padding: 6px 16px; font-size: 0.82rem; font-weight: 600; cursor: pointer; }
+  .btn-save:hover { background: #5a67d8; }
+  .btn-cancel { background: none; color: #a0aec0; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 0.82rem; cursor: pointer; }
+
+  .week-header-left { display: flex; align-items: center; flex: 1; min-width: 0; }
   .collapsible .week-body { display: none; }
   .collapsible.open .week-body { display: block; }
+
   @media (max-width: 500px) {
     .camps-grid { grid-template-columns: 1fr; }
     h1 { font-size: 1.4rem; }
@@ -188,7 +220,7 @@
 
 <div class="legend">
   <div class="legend-item"><div class="legend-dot" style="background:#fc8181"></div> Already planned</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#68d391"></div> Open &mdash; no camps yet</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#68d391"></div> Open</div>
   <div class="legend-item"><div class="legend-dot" style="background:#63b3ed"></div> Camp options available</div>
   <div class="legend-item"><div class="legend-dot" style="background:#b794f4"></div> Decided</div>
 </div>
@@ -202,61 +234,38 @@
 
 const LAST_UPDATED = "May 26, 2026";
 
-// Each week entry:
-//   month       - "June", "July", or "August"
-//   dates       - display string shown in the header
-//   status      - "blocked" | "available" | "camps" | "decided"
-//   note        - optional short note in header (e.g. "3 options")
-//   blockedReason  - text shown when status is "blocked"
-//   decidedNote    - text shown when status is "decided"
-//   camps          - array of camp objects (for "camps" or "decided" weeks)
-//
-// Camp object:
-//   name, ages, description, price
-//   picked: true   ← mark the chosen one when status is "decided"
-
 const WEEKS = [
 
   // ── JUNE ────────────────────────────────────────────────
   {
+    id: "jun1",
     month: "June",
     dates: "Mon Jun 1 – Fri Jun 6",
     status: "blocked",
     blockedReason: "School still in session",
   },
   {
+    id: "jun2",
     month: "June",
     dates: "Mon Jun 8 – Fri Jun 12",
-    status: "camps",
-    note: "2 options",
-    camps: [
-      {
-        name: "Example: Art & Science Camp",
-        ages: "Ages 7–12",
-        description: "Morning art projects and afternoon science experiments. Drop-off 8am, pickup 4pm.",
-        price: "$325 / week",
-        picked: false,
-      },
-      {
-        name: "Example: Soccer Skills Camp",
-        ages: "Ages 6–14",
-        description: "Full-day skills training with certified coaches. All equipment provided.",
-        price: "$275 / week",
-        picked: false,
-      },
-    ],
+    status: "available",
   },
   {
+    id: "jun3",
     month: "June",
     dates: "Mon Jun 15 – Fri Jun 19",
-    status: "available",
+    status: "blocked",
+    blockedReason: "Florida Trip (departing Fri Jun 19)",
   },
   {
+    id: "jun4",
     month: "June",
     dates: "Mon Jun 22 – Fri Jun 26",
-    status: "available",
+    status: "blocked",
+    blockedReason: "Florida Trip (returning Tue Jun 23)",
   },
   {
+    id: "jun5",
     month: "June",
     dates: "Mon Jun 29 – Fri Jul 3",
     status: "blocked",
@@ -265,78 +274,59 @@ const WEEKS = [
 
   // ── JULY ────────────────────────────────────────────────
   {
+    id: "jul1",
     month: "July",
     dates: "Mon Jul 6 – Fri Jul 10",
     status: "available",
   },
   {
+    id: "jul2",
     month: "July",
     dates: "Mon Jul 13 – Fri Jul 17",
-    status: "camps",
-    note: "3 options",
-    camps: [
-      {
-        name: "Example: Theater & Drama",
-        ages: "Ages 8–13",
-        description: "Week-long musical theater workshop culminating in a Friday performance for families.",
-        price: "$350 / week",
-        picked: false,
-      },
-      {
-        name: "Example: Coding Explorers",
-        ages: "Ages 9–14",
-        description: "Intro to Scratch and Python through game-building projects. Laptops provided.",
-        price: "$395 / week",
-        picked: false,
-      },
-      {
-        name: "Example: Swimming & Aquatics",
-        ages: "Ages 6–12",
-        description: "Small-group swim lessons and water games each afternoon.",
-        price: "$240 / week",
-        picked: false,
-      },
-    ],
+    status: "available",
   },
   {
+    id: "jul3",
     month: "July",
     dates: "Mon Jul 20 – Fri Jul 24",
+    status: "available",
+  },
+  {
+    id: "jul4",
+    month: "July",
+    dates: "Mon Jul 27 – Fri Jul 31",
     status: "decided",
-    decidedNote: "Signed up: Example Camp — $325 paid",
+    decidedNote: "Camp Lakewood",
     camps: [
       {
-        name: "Example: Dance Intensive",
-        ages: "Ages 7–12",
-        description: "Ballet, jazz, and hip-hop. End-of-week showcase Friday at 5pm.",
-        price: "$310 / week",
+        name: "Camp Lakewood",
         picked: true,
       },
     ],
   },
-  {
-    month: "July",
-    dates: "Mon Jul 27 – Fri Jul 31",
-    status: "available",
-  },
 
   // ── AUGUST ──────────────────────────────────────────────
   {
+    id: "aug1",
     month: "August",
     dates: "Mon Aug 3 – Fri Aug 7",
     status: "available",
   },
   {
+    id: "aug2",
     month: "August",
     dates: "Mon Aug 10 – Fri Aug 14",
     status: "available",
   },
   {
+    id: "aug3",
     month: "August",
     dates: "Mon Aug 17 – Fri Aug 21",
     status: "blocked",
     blockedReason: "Vacation with grandparents",
   },
   {
+    id: "aug4",
     month: "August",
     dates: "Mon Aug 24 – Fri Aug 28",
     status: "blocked",
@@ -345,7 +335,7 @@ const WEEKS = [
 ];
 
 // ============================================================
-//  RENDERING — no need to edit below this line
+//  APP — no need to edit below this line
 // ============================================================
 
 document.getElementById("last-updated").textContent = LAST_UPDATED;
@@ -353,76 +343,240 @@ document.getElementById("last-updated").textContent = LAST_UPDATED;
 const BADGE = {
   blocked:   { cls: "badge-blocked",   label: "Already planned" },
   available: { cls: "badge-available", label: "Open" },
-  camps:     { cls: "badge-camps",     label: "Options available" },
   decided:   { cls: "badge-decided",   label: "Decided ✓" },
 };
 
-const CAL = document.getElementById("calendar");
-const months = [...new Set(WEEKS.map(w => w.month))];
+const STORAGE_KEY = "campCalendar_v1";
+let CAMPS_DATA = { camps: [] };
 
-months.forEach(function(month) {
-  var section = document.createElement("div");
-  section.className = "month-section";
-  section.innerHTML = '<div class="month-header">' + month + '</div>';
+function loadState() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); }
+  catch(e) { return {}; }
+}
 
-  WEEKS.filter(function(w) { return w.month === month; }).forEach(function(week) {
-    var b = BADGE[week.status];
-    var hasCamps = week.camps && week.camps.length > 0;
-    var isCollapsible = week.status !== "available" || hasCamps;
+function saveState(state) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
 
-    var card = document.createElement("div");
-    card.className = "week-card " + week.status + (isCollapsible ? " collapsible" : "");
+function campsForWeek(weekId) {
+  return CAMPS_DATA.camps.filter(function(c) {
+    return c.weeks && c.weeks.indexOf(weekId) !== -1;
+  });
+}
 
-    var noteHtml = week.note ? '<span class="week-note">' + week.note + '</span>' : "";
+async function init() {
+  try {
+    var resp = await fetch("./camps.json");
+    if (resp.ok) CAMPS_DATA = await resp.json();
+  } catch(e) { /* offline or local file — no suggestions */ }
+  renderCalendar();
+}
 
-    var bodyContent = "";
-    if (week.status === "blocked") {
-      bodyContent += '<div class="blocked-reason">🚫 ' + (week.blockedReason || "") + '</div>';
-    }
-    if (week.status === "decided") {
-      bodyContent += '<div class="week-decided-note">✓ ' + (week.decidedNote || "") + '</div>';
-    }
-    if (hasCamps) {
-      bodyContent += '<div class="camps-grid">' + week.camps.map(campHtml).join("") + '</div>';
-    }
-    if (week.status === "available" && !hasCamps) {
-      bodyContent += '<div class="no-camps">No camps added yet for this week.</div>';
-    }
+function renderCalendar() {
+  var state = loadState();
+  var CAL = document.getElementById("calendar");
+  CAL.innerHTML = "";
 
-    card.innerHTML =
-      '<div class="week-header">' +
-        '<div class="week-header-left">' +
-          '<span class="week-dates">' + week.dates + '</span>' +
-          noteHtml +
-        '</div>' +
-        '<span class="week-badge ' + b.cls + '">' + b.label + '</span>' +
-      '</div>' +
-      '<div class="week-body">' + bodyContent + '</div>';
-
-    if (isCollapsible) {
-      card.querySelector(".week-header").addEventListener("click", function() {
-        card.classList.toggle("open");
-      });
-      if (week.status === "camps" || week.status === "decided") {
-        card.classList.add("open");
-      }
-    }
-
-    section.appendChild(card);
+  var months = [];
+  WEEKS.forEach(function(w) {
+    if (months.indexOf(w.month) === -1) months.push(w.month);
   });
 
-  CAL.appendChild(section);
-});
+  months.forEach(function(month) {
+    var section = document.createElement("div");
+    section.className = "month-section";
+    section.innerHTML = '<div class="month-header">' + month + "</div>";
 
-function campHtml(camp) {
-  return '<div class="camp-tile' + (camp.picked ? ' picked' : '') + '">' +
-    (camp.picked ? '<span class="picked-badge">PICKED</span>' : '') +
-    '<div class="camp-name">' + camp.name + '</div>' +
-    '<div class="camp-meta">' + (camp.ages || "") + '</div>' +
-    '<div class="camp-desc">' + (camp.description || "") + '</div>' +
-    '<span class="camp-price">' + camp.price + '</span>' +
-    '</div>';
+    WEEKS.filter(function(w) { return w.month === month; }).forEach(function(week) {
+      var suggested = week.id ? campsForWeek(week.id) : [];
+      var customList = (week.id && state[week.id + "_custom"]) || [];
+      var interestedId = week.id ? (state[week.id + "_interested"] || null) : null;
+
+      var hasSuggested = suggested.length > 0;
+      var hasHardCamps = week.camps && week.camps.length > 0;
+      var isCollapsible = week.status !== "available" || hasHardCamps || hasSuggested || customList.length > 0;
+
+      // Card class
+      var cardClass = "week-card";
+      if (week.status === "blocked") cardClass += " blocked";
+      else if (week.status === "decided") cardClass += " decided";
+      else if (hasSuggested || customList.length > 0) cardClass += " has-suggestions";
+      else cardClass += " available";
+      if (isCollapsible) cardClass += " collapsible";
+
+      // Badge
+      var badgeCls, badgeLabel;
+      if (week.status === "blocked") {
+        badgeCls = "badge-blocked"; badgeLabel = "Already planned";
+      } else if (week.status === "decided") {
+        badgeCls = "badge-decided"; badgeLabel = "Decided ✓";
+      } else if (hasSuggested) {
+        badgeCls = "badge-camps";
+        badgeLabel = suggested.length + " camp" + (suggested.length !== 1 ? "s" : "") + " available";
+      } else {
+        badgeCls = "badge-available"; badgeLabel = "Open";
+      }
+
+      // Body content
+      var body = "";
+
+      if (week.status === "blocked") {
+        body += '<div class="blocked-reason">🚫 ' + (week.blockedReason || "") + "</div>";
+      }
+
+      if (week.status === "decided") {
+        body += '<div class="week-decided-note">✓ ' + (week.decidedNote || "") + "</div>";
+      }
+
+      // Hard-coded camps (e.g. Camp Lakewood picked)
+      if (hasHardCamps) {
+        body += '<div class="camps-grid">';
+        week.camps.forEach(function(c) { body += buildCampTile(c, false, null); });
+        body += "</div>";
+      }
+
+      // Suggested camps from camps.json
+      if (hasSuggested) {
+        body += '<div class="camps-section-label">Suggested Camps — click to mark interest</div>';
+        body += '<div class="camps-grid">';
+        suggested.forEach(function(c) {
+          var isInterested = interestedId === c.id;
+          body += buildCampTile(c, isInterested, week.id);
+        });
+        body += "</div>";
+      }
+
+      // Custom camps
+      if (customList.length > 0) {
+        body += '<div class="camps-section-label">Custom Camps</div>';
+        body += '<div class="camps-grid">';
+        customList.forEach(function(c) {
+          body += buildCampTile(c, false, null);
+        });
+        body += "</div>";
+      }
+
+      if (week.status === "available" && !hasSuggested && customList.length === 0) {
+        body += '<div class="no-camps">No camps yet — add one below or check back as camps.json is updated.</div>';
+      }
+
+      // Add custom camp button (open weeks only)
+      if (week.id && week.status !== "blocked" && week.status !== "decided") {
+        body += '<div class="custom-camp-area">';
+        body += '<button class="btn-add-custom" onclick="toggleForm(\'' + week.id + '\')">+ Add custom camp</button>';
+        body += '<div id="form-' + week.id + '"></div>';
+        body += "</div>";
+      }
+
+      var card = document.createElement("div");
+      card.className = cardClass;
+      card.innerHTML =
+        '<div class="week-header">' +
+          '<div class="week-header-left">' +
+            '<span class="week-dates">' + week.dates + "</span>" +
+          "</div>" +
+          '<span class="week-badge ' + badgeCls + '">' + badgeLabel + "</span>" +
+        "</div>" +
+        '<div class="week-body">' + body + "</div>";
+
+      if (isCollapsible) {
+        card.querySelector(".week-header").addEventListener("click", function(e) {
+          if (e.target.tagName === "BUTTON" || e.target.closest("button")) return;
+          card.classList.toggle("open");
+        });
+        if (week.status === "decided" || hasSuggested) {
+          card.classList.add("open");
+        }
+      }
+
+      section.appendChild(card);
+    });
+
+    CAL.appendChild(section);
+  });
 }
+
+function buildCampTile(camp, isInterested, weekId) {
+  var isPicked = camp.picked === true;
+  var price = camp.priceDisplay || (camp.price ? "$" + camp.price : "");
+  var clickAttr = (!isPicked && weekId && camp.id)
+    ? ' onclick="toggleInterest(\'' + weekId + "','" + camp.id + '\')"'
+    : "";
+  var cls = "camp-tile" + (isPicked ? " picked" : "") + (isInterested ? " interested" : "");
+  var badge = isPicked
+    ? '<span class="tile-badge picked-badge">PICKED</span>'
+    : (isInterested ? '<span class="tile-badge interest-badge">★ Interested</span>' : "");
+  var meta = [camp.provider, camp.ages].filter(Boolean).join(" · ");
+
+  return '<div class="' + cls + '"' + clickAttr + ">" +
+    badge +
+    '<div class="camp-name">' + camp.name + "</div>" +
+    (meta ? '<div class="camp-meta">' + meta + "</div>" : "") +
+    (camp.description ? '<div class="camp-desc">' + camp.description + "</div>" : "") +
+    (camp.note ? '<div class="camp-note">' + camp.note + "</div>" : "") +
+    (price ? '<span class="camp-price">' + price + "</span>" : "") +
+    "</div>";
+}
+
+function toggleInterest(weekId, campId) {
+  var state = loadState();
+  var key = weekId + "_interested";
+  state[key] = state[key] === campId ? null : campId;
+  saveState(state);
+  renderCalendar();
+  reopenWeek(weekId);
+}
+
+function toggleForm(weekId) {
+  var el = document.getElementById("form-" + weekId);
+  if (!el) return;
+  if (el.innerHTML) { el.innerHTML = ""; return; }
+  el.innerHTML =
+    '<div class="custom-form">' +
+      '<div class="form-row">' +
+        '<input class="form-input" id="cf-name-' + weekId + '" placeholder="Camp name" />' +
+        '<input class="form-input" id="cf-price-' + weekId + '" placeholder="Price e.g. $300" style="max-width:140px" />' +
+      "</div>" +
+      '<div class="form-row">' +
+        '<input class="form-input" id="cf-desc-' + weekId + '" placeholder="Description (optional)" />' +
+      "</div>" +
+      '<div class="form-row">' +
+        '<button class="btn-save" onclick="saveCustom(\'' + weekId + '\')">Save</button>' +
+        '<button class="btn-cancel" onclick="document.getElementById(\'form-' + weekId + '\').innerHTML=\'\'">Cancel</button>' +
+      "</div>" +
+    "</div>";
+}
+
+function saveCustom(weekId) {
+  var name = (document.getElementById("cf-name-" + weekId) || {}).value || "";
+  var price = (document.getElementById("cf-price-" + weekId) || {}).value || "";
+  var desc = (document.getElementById("cf-desc-" + weekId) || {}).value || "";
+  name = name.trim();
+  if (!name) { alert("Please enter a camp name."); return; }
+  var state = loadState();
+  var key = weekId + "_custom";
+  if (!state[key]) state[key] = [];
+  state[key].push({ name: name, priceDisplay: price.trim(), description: desc.trim(), id: "custom-" + Date.now() });
+  saveState(state);
+  renderCalendar();
+  reopenWeek(weekId);
+}
+
+function reopenWeek(weekId) {
+  setTimeout(function() {
+    document.querySelectorAll(".week-card").forEach(function(card) {
+      if (card.querySelector('[id="form-' + weekId + '"]') || card.querySelector('.camps-grid')) {
+        var dates = card.querySelector(".week-dates");
+        if (dates) {
+          var week = WEEKS.find(function(w) { return w.id === weekId; });
+          if (week && dates.textContent === week.dates) card.classList.add("open");
+        }
+      }
+    });
+  }, 0);
+}
+
+init();
 </script>
 </body>
 </html>

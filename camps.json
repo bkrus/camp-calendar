@@ -1,0 +1,59 @@
+{
+  "camps": [
+    {
+      "id": "camp-legacy-regular",
+      "name": "Camp Legacy – Regular Week",
+      "provider": "Ladue Schools",
+      "ages": "Rising 6th–9th grade",
+      "weeks": ["jun2", "jun3", "jun5", "jul1"],
+      "price": 355,
+      "priceDisplay": "$355 / week",
+      "description": "45-minute classes in diverse activities including robotics, cooking, sports, and arts. Located at Ladue Middle School, 9701 Conway Rd.",
+      "note": "$175 deposit secures spot · $15 off early deposit · $10 off per additional session"
+    },
+    {
+      "id": "camp-legacy-excursion",
+      "name": "Camp Legacy – Excursion Week",
+      "provider": "Ladue Schools",
+      "ages": "Rising 6th–9th grade",
+      "weeks": ["jun1", "jun4", "jul2"],
+      "price": 405,
+      "priceDisplay": "$405 / week",
+      "description": "Field trip-focused week visiting venues like water parks, skating rinks, and entertainment centers. Located at Ladue Middle School.",
+      "note": "$175 deposit secures spot (limit 100 students/week)"
+    },
+    {
+      "id": "ignite-frog-toad",
+      "name": "Hop Into Summer! – Frog and Toad Jr.",
+      "provider": "Ignite Theatre Company",
+      "ages": "Ages 5–12",
+      "weeks": ["jun1"],
+      "price": 425,
+      "priceDisplay": "$425",
+      "description": "Musical theater camp performing A Year with Frog and Toad Jr. at Robert E. Reim Theatre.",
+      "note": "Verify 2026 dates with Ignite — pricing based on 2025 schedule"
+    },
+    {
+      "id": "ignite-something-rotten",
+      "name": "Something Rotten Jr.",
+      "provider": "Ignite Theatre Company",
+      "ages": "6th–10th grade",
+      "weeks": ["jun1", "jun2"],
+      "price": 625,
+      "priceDisplay": "$625 (two-week program)",
+      "description": "Two-week musical theater intensive. Week 1 at Ignite Theatre Company, Week 2 at Robert E. Reim Theatre. Must enroll in both weeks.",
+      "note": "Verify 2026 dates with Ignite — pricing based on 2025 schedule"
+    },
+    {
+      "id": "ignite-alice",
+      "name": "Alice by Heart – Senior Mainstage",
+      "provider": "Ignite Theatre Company",
+      "ages": "Ages 14–21",
+      "weeks": ["jun1", "jun2", "jun3", "jun4", "jun5", "jul1", "jul2", "jul3"],
+      "price": 410,
+      "priceDisplay": "$410 production fee",
+      "description": "Ongoing commitment: Tuesday/Thursday rehearsals 5–9pm starting June 2 through summer. Performances August 7–9.",
+      "note": "Verify 2026 audition dates with Ignite — details based on 2025 schedule"
+    }
+  ]
+}
