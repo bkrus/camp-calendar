@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Summer Camp Calendar 2026</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f0f4f8;
+    color: #2d3748;
+    padding: 24px 16px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    text-align: center;
+    color: #718096;
+    font-size: 0.9rem;
+    margin-bottom: 32px;
+  }
+  .legend {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: #4a5568;
+  }
+  .legend-dot {
+    width: 12px; height: 12px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .month-section { margin-bottom: 36px; }
+  .month-header {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+    padding-left: 4px;
+  }
+  .week-card {
+    background: white;
+    border-radius: 10px;
+    border-left: 5px solid #e2e8f0;
+    margin-bottom: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .week-card.blocked { border-left-color: #fc8181; }
+  .week-card.available { border-left-color: #68d391; }
+  .week-card.camps { border-left-color: #63b3ed; }
+  .week-card.decided { border-left-color: #b794f4; }
+
+  .week-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .week-dates {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .week-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .badge-blocked { background: #fed7d7; color: #c53030; }
+  .badge-available { background: #c6f6d5; color: #276749; }
+  .badge-camps { background: #bee3f8; color: #2b6cb0; }
+  .badge-decided { background: #e9d8fd; color: #553c9a; }
+
+  .week-note {
+    font-size: 0.82rem;
+    color: #718096;
+    margin-left: 12px;
+  }
+  .week-body {
+    padding: 0 16px 14px;
+    border-top: 1px solid #f7fafc;
+  }
+  .blocked-reason {
+    font-size: 0.88rem;
+    color: #c53030;
+    padding-top: 10px;
+  }
+  .camps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+    padding-top: 12px;
+  }
+  .camp-tile {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px 14px;
+    position: relative;
+  }
+  .camp-tile.picked {
+    border-color: #b794f4;
+    background: #faf5ff;
+  }
+  .camp-name {
+    font-weight: 600;
+    font-size: 0.92rem;
+    margin-bottom: 2px;
+  }
+  .camp-meta {
+    font-size: 0.78rem;
+    color: #718096;
+    margin-bottom: 6px;
+  }
+  .camp-desc {
+    font-size: 0.82rem;
+    color: #4a5568;
+    margin-bottom: 8px;
+    line-height: 1.45;
+  }
+  .camp-price {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #2b6cb0;
+    background: #ebf8ff;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .picked-badge {
+    position: absolute;
+    top: 10px; right: 10px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    background: #b794f4;
+    color: white;
+    padding: 2px 7px;
+    border-radius: 10px;
+  }
+  .week-decided-note {
+    font-size: 0.88rem;
+    color: #553c9a;
+    padding-top: 10px;
+    font-weight: 500;
+  }
+  .no-camps {
+    font-size: 0.85rem;
+    color: #a0aec0;
+    padding-top: 10px;
+    font-style: italic;
+  }
+  .week-header-left {
+    display: flex;
+    align-items: center;
+    flex: 1;
+  }
+  .collapsible .week-body { display: none; }
+  .collapsible.open .week-body { display: block; }
+  @media (max-width: 500px) {
+    .camps-grid { grid-template-columns: 1fr; }
+    h1 { font-size: 1.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>&#9728; Summer Camp Calendar 2026</h1>
+<p class="subtitle">June &ndash; August &bull; Last updated <span id="last-updated"></span></p>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#fc8181"></div> Already planned</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#68d391"></div> Open &mdash; no camps yet</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#63b3ed"></div> Camp options available</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#b794f4"></div> Decided</div>
+</div>
+
+<div id="calendar"></div>
+
+<script>
+// ============================================================
+//  EDIT YOUR DATA HERE
+// ============================================================
+
+const LAST_UPDATED = "May 26, 2026";
+
+// Each week entry:
+//   month       - "June", "July", or "August"
+//   dates       - display string shown in the header
+//   status      - "blocked" | "available" | "camps" | "decided"
+//   note        - optional short note in header (e.g. "3 options")
+//   blockedReason  - text shown when status is "blocked"
+//   decidedNote    - text shown when status is "decided"
+//   camps          - array of camp objects (for "camps" or "decided" weeks)
+//
+// Camp object:
+//   name, ages, description, price
+//   picked: true   ← mark the chosen one when status is "decided"
+
+const WEEKS = [
+
+  // ── JUNE ────────────────────────────────────────────────
+  {
+    month: "June",
+    dates: "Mon Jun 1 – Fri Jun 6",
+    status: "blocked",
+    blockedReason: "School still in session",
+  },
+  {
+    month: "June",
+    dates: "Mon Jun 8 – Fri Jun 12",
+    status: "camps",
+    note: "2 options",
+    camps: [
+      {
+        name: "Example: Art & Science Camp",
+        ages: "Ages 7–12",
+        description: "Morning art projects and afternoon science experiments. Drop-off 8am, pickup 4pm.",
+        price: "$325 / week",
+        picked: false,
+      },
+      {
+        name: "Example: Soccer Skills Camp",
+        ages: "Ages 6–14",
+        description: "Full-day skills training with certified coaches. All equipment provided.",
+        price: "$275 / week",
+        picked: false,
+      },
+    ],
+  },
+  {
+    month: "June",
+    dates: "Mon Jun 15 – Fri Jun 19",
+    status: "available",
+  },
+  {
+    month: "June",
+    dates: "Mon Jun 22 – Fri Jun 26",
+    status: "available",
+  },
+  {
+    month: "June",
+    dates: "Mon Jun 29 – Fri Jul 3",
+    status: "blocked",
+    blockedReason: "4th of July week — family trip",
+  },
+
+  // ── JULY ────────────────────────────────────────────────
+  {
+    month: "July",
+    dates: "Mon Jul 6 – Fri Jul 10",
+    status: "available",
+  },
+  {
+    month: "July",
+    dates: "Mon Jul 13 – Fri Jul 17",
+    status: "camps",
+    note: "3 options",
+    camps: [
+      {
+        name: "Example: Theater & Drama",
+        ages: "Ages 8–13",
+        description: "Week-long musical theater workshop culminating in a Friday performance for families.",
+        price: "$350 / week",
+        picked: false,
+      },
+      {
+        name: "Example: Coding Explorers",
+        ages: "Ages 9–14",
+        description: "Intro to Scratch and Python through game-building projects. Laptops provided.",
+        price: "$395 / week",
+        picked: false,
+      },
+      {
+        name: "Example: Swimming & Aquatics",
+        ages: "Ages 6–12",
+        description: "Small-group swim lessons and water games each afternoon.",
+        price: "$240 / week",
+        picked: false,
+      },
+    ],
+  },
+  {
+    month: "July",
+    dates: "Mon Jul 20 – Fri Jul 24",
+    status: "decided",
+    decidedNote: "Signed up: Example Camp — $325 paid",
+    camps: [
+      {
+        name: "Example: Dance Intensive",
+        ages: "Ages 7–12",
+        description: "Ballet, jazz, and hip-hop. End-of-week showcase Friday at 5pm.",
+        price: "$310 / week",
+        picked: true,
+      },
+    ],
+  },
+  {
+    month: "July",
+    dates: "Mon Jul 27 – Fri Jul 31",
+    status: "available",
+  },
+
+  // ── AUGUST ──────────────────────────────────────────────
+  {
+    month: "August",
+    dates: "Mon Aug 3 – Fri Aug 7",
+    status: "available",
+  },
+  {
+    month: "August",
+    dates: "Mon Aug 10 – Fri Aug 14",
+    status: "available",
+  },
+  {
+    month: "August",
+    dates: "Mon Aug 17 – Fri Aug 21",
+    status: "blocked",
+    blockedReason: "Vacation with grandparents",
+  },
+  {
+    month: "August",
+    dates: "Mon Aug 24 – Fri Aug 28",
+    status: "blocked",
+    blockedReason: "Back-to-school prep",
+  },
+];
+
+// ============================================================
+//  RENDERING — no need to edit below this line
+// ============================================================
+
+document.getElementById("last-updated").textContent = LAST_UPDATED;
+
+const BADGE = {
+  blocked:   { cls: "badge-blocked",   label: "Already planned" },
+  available: { cls: "badge-available", label: "Open" },
+  camps:     { cls: "badge-camps",     label: "Options available" },
+  decided:   { cls: "badge-decided",   label: "Decided ✓" },
+};
+
+const CAL = document.getElementById("calendar");
+const months = [...new Set(WEEKS.map(w => w.month))];
+
+months.forEach(function(month) {
+  var section = document.createElement("div");
+  section.className = "month-section";
+  section.innerHTML = '<div class="month-header">' + month + '</div>';
+
+  WEEKS.filter(function(w) { return w.month === month; }).forEach(function(week) {
+    var b = BADGE[week.status];
+    var hasCamps = week.camps && week.camps.length > 0;
+    var isCollapsible = week.status !== "available" || hasCamps;
+
+    var card = document.createElement("div");
+    card.className = "week-card " + week.status + (isCollapsible ? " collapsible" : "");
+
+    var noteHtml = week.note ? '<span class="week-note">' + week.note + '</span>' : "";
+
+    var bodyContent = "";
+    if (week.status === "blocked") {
+      bodyContent += '<div class="blocked-reason">🚫 ' + (week.blockedReason || "") + '</div>';
+    }
+    if (week.status === "decided") {
+      bodyContent += '<div class="week-decided-note">✓ ' + (week.decidedNote || "") + '</div>';
+    }
+    if (hasCamps) {
+      bodyContent += '<div class="camps-grid">' + week.camps.map(campHtml).join("") + '</div>';
+    }
+    if (week.status === "available" && !hasCamps) {
+      bodyContent += '<div class="no-camps">No camps added yet for this week.</div>';
+    }
+
+    card.innerHTML =
+      '<div class="week-header">' +
+        '<div class="week-header-left">' +
+          '<span class="week-dates">' + week.dates + '</span>' +
+          noteHtml +
+        '</div>' +
+        '<span class="week-badge ' + b.cls + '">' + b.label + '</span>' +
+      '</div>' +
+      '<div class="week-body">' + bodyContent + '</div>';
+
+    if (isCollapsible) {
+      card.querySelector(".week-header").addEventListener("click", function() {
+        card.classList.toggle("open");
+      });
+      if (week.status === "camps" || week.status === "decided") {
+        card.classList.add("open");
+      }
+    }
+
+    section.appendChild(card);
+  });
+
+  CAL.appendChild(section);
+});
+
+function campHtml(camp) {
+  return '<div class="camp-tile' + (camp.picked ? ' picked' : '') + '">' +
+    (camp.picked ? '<span class="picked-badge">PICKED</span>' : '') +
+    '<div class="camp-name">' + camp.name + '</div>' +
+    '<div class="camp-meta">' + (camp.ages || "") + '</div>' +
+    '<div class="camp-desc">' + (camp.description || "") + '</div>' +
+    '<span class="camp-price">' + camp.price + '</span>' +
+    '</div>';
+}
+</script>
+</body>
+</html>
