@@ -62,10 +62,11 @@
     overflow: hidden;
     box-shadow: 0 1px 3px rgba(0,0,0,0.06);
   }
-  .week-card.blocked  { border-left-color: #fc8181; }
-  .week-card.available { border-left-color: #68d391; }
+  .week-card.blocked        { border-left-color: #fc8181; }
+  .week-card.partial-blocked { border-left-color: #f6ad55; }
+  .week-card.available      { border-left-color: #68d391; }
   .week-card.has-suggestions { border-left-color: #63b3ed; }
-  .week-card.decided  { border-left-color: #b794f4; }
+  .week-card.decided        { border-left-color: #b794f4; }
 
   .week-header {
     display: flex;
@@ -147,6 +148,20 @@
   .camp-meta { font-size: 0.78rem; color: #718096; margin-bottom: 6px; }
   .camp-desc { font-size: 0.82rem; color: #4a5568; margin-bottom: 6px; line-height: 1.45; }
   .camp-note { font-size: 0.75rem; color: #a0aec0; margin-bottom: 8px; }
+  .camp-footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .camp-link {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #4299e1;
+    text-decoration: none;
+  }
+  .camp-link:hover { text-decoration: underline; }
   .camp-price {
     display: inline-block;
     font-weight: 700;
@@ -255,6 +270,7 @@ const WEEKS = [
     month: "June",
     dates: "Mon Jun 15 – Fri Jun 19",
     status: "blocked",
+    partial: true,
     blockedReason: "Florida Trip (departing Fri Jun 19)",
   },
   {
@@ -262,14 +278,14 @@ const WEEKS = [
     month: "June",
     dates: "Mon Jun 22 – Fri Jun 26",
     status: "blocked",
+    partial: true,
     blockedReason: "Florida Trip (returning Tue Jun 23)",
   },
   {
     id: "jun5",
     month: "June",
     dates: "Mon Jun 29 – Fri Jul 3",
-    status: "blocked",
-    blockedReason: "4th of July week — family trip",
+    status: "available",
   },
 
   // ── JULY ────────────────────────────────────────────────
@@ -398,7 +414,8 @@ function renderCalendar() {
 
       // Card class
       var cardClass = "week-card";
-      if (week.status === "blocked") cardClass += " blocked";
+      if (week.status === "blocked" && week.partial) cardClass += " partial-blocked";
+      else if (week.status === "blocked") cardClass += " blocked";
       else if (week.status === "decided") cardClass += " decided";
       else if (hasSuggested || customList.length > 0) cardClass += " has-suggestions";
       else cardClass += " available";
@@ -406,8 +423,10 @@ function renderCalendar() {
 
       // Badge
       var badgeCls, badgeLabel;
-      if (week.status === "blocked") {
+      if (week.status === "blocked" && !week.partial) {
         badgeCls = "badge-blocked"; badgeLabel = "Already planned";
+      } else if (week.status === "blocked" && week.partial) {
+        badgeCls = ""; badgeLabel = "";
       } else if (week.status === "decided") {
         badgeCls = "badge-decided"; badgeLabel = "Decided ✓";
       } else if (hasSuggested) {
@@ -435,8 +454,8 @@ function renderCalendar() {
         body += "</div>";
       }
 
-      // Suggested camps from camps.json
-      if (hasSuggested) {
+      // Suggested camps from camps.json (skip for fully blocked weeks)
+      if (hasSuggested && (week.status !== "blocked" || week.partial)) {
         body += '<div class="camps-section-label">Suggested Camps — click to mark interest</div>';
         body += '<div class="camps-grid">';
         suggested.forEach(function(c) {
@@ -514,7 +533,10 @@ function buildCampTile(camp, isInterested, weekId) {
     (meta ? '<div class="camp-meta">' + meta + "</div>" : "") +
     (camp.description ? '<div class="camp-desc">' + camp.description + "</div>" : "") +
     (camp.note ? '<div class="camp-note">' + camp.note + "</div>" : "") +
-    (price ? '<span class="camp-price">' + price + "</span>" : "") +
+    '<div class="camp-footer">' +
+      (price ? '<span class="camp-price">' + price + "</span>" : "") +
+      (camp.url ? ' <a class="camp-link" href="' + camp.url + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">View site ↗</a>' : "") +
+    "</div>" +
     "</div>";
 }
 
